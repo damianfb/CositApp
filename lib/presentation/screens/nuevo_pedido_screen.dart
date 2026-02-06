@@ -56,7 +56,7 @@ class _NuevoPedidoScreenState extends State<NuevoPedidoScreen> {
 
   // Datos del pedido
   Cliente? _selectedCliente;
-  List<ProductoItem> _productosAgregados = [];
+  final List<ProductoItem> _productosAgregados = [];
   DateTime? _fechaEntrega;
   double? _precioTotal;
   double? _senia;
