@@ -414,16 +414,16 @@ dev_dependencies:
 
 ### Generar Iconos de Launcher
 
-El proyecto está configurado para usar el logo oficial:
+El proyecto está configurado para usar el logo oficial desde `assets/images/cositasdelaabuela.png`:
 
 ```yaml
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "lib/data/resources/cositasdelaabuela.png"
+  image_path: "assets/images/cositasdelaabuela.png"
   min_sdk_android: 24
   adaptive_icon_background: "#F8BBD9"
-  adaptive_icon_foreground: "lib/data/resources/cositasdelaabuela.png"
+  adaptive_icon_foreground: "assets/images/cositasdelaabuela.png"
 ```
 
 Para generar los iconos:
@@ -439,6 +439,8 @@ Esto creará todos los iconos necesarios para Android en diferentes resoluciones
 El logo se muestra en:
 - **AppBar del Home**: Esquina superior izquierda junto al nombre
 - **Launcher Icon**: Icono de la aplicación en el dispositivo
+
+**Nota**: El archivo de logo se encuentra en `assets/images/cositasdelaabuela.png` (una copia también existe en `lib/data/resources/` para referencia).
 
 ## 🗄️ Base de Datos
 
