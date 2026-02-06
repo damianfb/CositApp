@@ -40,7 +40,7 @@ class _BirthdaysScreenState extends State<BirthdaysScreen> {
         _loading = false;
       });
     } catch (e) {
-      print('Error al cargar cumpleaños: $e');
+      debugPrint('Error al cargar cumpleaños: $e');
       setState(() {
         _loading = false;
       });

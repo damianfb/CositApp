@@ -34,12 +34,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/data/resources/cositasdelaabuela.png
+    - assets/images/cositasdelaabuela.png
 
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "lib/data/resources/cositasdelaabuela.png"
+  image_path: "assets/images/cositasdelaabuela.png"
   min_sdk_android: 24
   adaptive_icon_background: "#F8BBD9"
-  adaptive_icon_foreground: "lib/data/resources/cositasdelaabuela.png"
+  adaptive_icon_foreground: "assets/images/cositasdelaabuela.png"

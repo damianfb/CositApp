@@ -38,7 +38,7 @@ class _NotificationSettingsScreenState
         _loading = false;
       });
     } catch (e) {
-      print('Error al cargar preferencias: $e');
+      debugPrint('Error al cargar preferencias: $e');
       setState(() {
         _preferences = NotificationPreferences();
         _loading = false;
@@ -53,7 +53,7 @@ class _NotificationSettingsScreenState
         _pendingNotifications = pending.length;
       });
     } catch (e) {
-      print('Error al cargar notificaciones pendientes: $e');
+      debugPrint('Error al cargar notificaciones pendientes: $e');
     }
   }
 
@@ -71,7 +71,7 @@ class _NotificationSettingsScreenState
         );
       }
     } catch (e) {
-      print('Error al guardar preferencias: $e');
+      debugPrint('Error al guardar preferencias: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -99,7 +99,7 @@ class _NotificationSettingsScreenState
         );
       }
     } catch (e) {
-      print('Error al enviar notificación de prueba: $e');
+      debugPrint('Error al enviar notificación de prueba: $e');
     }
   }
 
@@ -119,7 +119,7 @@ class _NotificationSettingsScreenState
         );
       }
     } catch (e) {
-      print('Error al programar cumpleaños: $e');
+      debugPrint('Error al programar cumpleaños: $e');
     }
   }
 
@@ -157,7 +157,7 @@ class _NotificationSettingsScreenState
           );
         }
       } catch (e) {
-        print('Error al cancelar notificaciones: $e');
+        debugPrint('Error al cancelar notificaciones: $e');
       }
     }
   }

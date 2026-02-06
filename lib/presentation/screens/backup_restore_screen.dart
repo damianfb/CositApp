@@ -37,7 +37,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
         _loading = false;
       });
     } catch (e) {
-      print('Error al listar backups: $e');
+      debugPrint('Error al listar backups: $e');
       setState(() {
         _loading = false;
       });
@@ -96,7 +96,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
         }
       }
     } catch (e) {
-      print('Error al crear backup: $e');
+      debugPrint('Error al crear backup: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -190,7 +190,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
         }
       }
     } catch (e) {
-      print('Error al restaurar: $e');
+      debugPrint('Error al restaurar: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -259,7 +259,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
         }
       }
     } catch (e) {
-      print('Error al restaurar: $e');
+      debugPrint('Error al restaurar: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -282,7 +282,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
         text: 'Backup de CositApp',
       );
     } catch (e) {
-      print('Error al compartir: $e');
+      debugPrint('Error al compartir: $e');
     }
   }
 
@@ -316,7 +316,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
           );
         }
       } catch (e) {
-        print('Error al eliminar: $e');
+        debugPrint('Error al eliminar: $e');
       }
     }
   }

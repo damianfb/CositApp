@@ -61,12 +61,12 @@ class BackupService {
       
       await file.writeAsBytes(compressed!);
       
-      print('✅ Backup creado: ${file.path}');
-      print('📊 Tamaño: ${(file.lengthSync() / 1024).toStringAsFixed(2)} KB');
+      debugPrint('✅ Backup creado: ${file.path}');
+      debugPrint('📊 Tamaño: ${(file.lengthSync() / 1024).toStringAsFixed(2)} KB');
       
       return file;
     } catch (e) {
-      print('❌ Error al crear backup: $e');
+      debugPrint('❌ Error al crear backup: $e');
       return null;
     }
   }
@@ -84,7 +84,7 @@ class BackupService {
       // Obtener directorio de descargas
       final directory = await getExternalStorageDirectory();
       if (directory == null) {
-        print('❌ No se puede acceder al almacenamiento externo');
+        debugPrint('❌ No se puede acceder al almacenamiento externo');
         return null;
       }
 
@@ -103,10 +103,10 @@ class BackupService {
       // Eliminar archivo temporal
       await backupFile.delete();
       
-      print('✅ Backup guardado en: ${destinationFile.path}');
+      debugPrint('✅ Backup guardado en: ${destinationFile.path}');
       return destinationFile.path;
     } catch (e) {
-      print('❌ Error al guardar backup: $e');
+      debugPrint('❌ Error al guardar backup: $e');
       return null;
     }
   }
@@ -121,19 +121,19 @@ class BackupService {
       );
 
       if (result == null || result.files.isEmpty) {
-        print('⚠️ No se seleccionó ningún archivo');
+        debugPrint('⚠️ No se seleccionó ningún archivo');
         return false;
       }
 
       final filePath = result.files.single.path;
       if (filePath == null) {
-        print('❌ Ruta de archivo inválida');
+        debugPrint('❌ Ruta de archivo inválida');
         return false;
       }
 
       return await restoreBackup(File(filePath));
     } catch (e) {
-      print('❌ Error al seleccionar archivo: $e');
+      debugPrint('❌ Error al seleccionar archivo: $e');
       return false;
     }
   }
@@ -141,7 +141,7 @@ class BackupService {
   /// Restaura la base de datos desde un archivo de backup
   Future<bool> restoreBackup(File backupFile) async {
     try {
-      print('🔄 Iniciando restauración de backup...');
+      debugPrint('🔄 Iniciando restauración de backup...');
       
       // Leer archivo
       final bytes = await backupFile.readAsBytes();
@@ -161,12 +161,12 @@ class BackupService {
       
       // Validar formato
       if (!backup.containsKey('version') || !backup.containsKey('cliente')) {
-        print('❌ Formato de backup inválido');
+        debugPrint('❌ Formato de backup inválido');
         return false;
       }
       
-      print('📦 Backup válido detectado');
-      print('📅 Fecha de exportación: ${backup['export_date']}');
+      debugPrint('📦 Backup válido detectado');
+      debugPrint('📅 Fecha de exportación: ${backup['export_date']}');
       
       // Obtener base de datos
       final db = await DatabaseHelper.instance.database;
@@ -190,19 +190,19 @@ class BackupService {
         'bizcochuelo',
       ];
       
-      print('🗑️ Limpiando base de datos actual...');
+      debugPrint('🗑️ Limpiando base de datos actual...');
       for (final table in tables) {
         await db.delete(table);
       }
       
       // Restaurar cada tabla
-      print('📥 Restaurando datos...');
+      debugPrint('📥 Restaurando datos...');
       int totalRecords = 0;
       
       for (final table in tables) {
         if (backup.containsKey(table)) {
           final records = backup[table] as List<dynamic>;
-          print('  - Restaurando tabla $table: ${records.length} registros');
+          debugPrint('  - Restaurando tabla $table: ${records.length} registros');
           
           for (final record in records) {
             await db.insert(table, record as Map<String, dynamic>);
@@ -214,10 +214,10 @@ class BackupService {
       // Reactivar foreign keys
       await db.execute('PRAGMA foreign_keys = ON');
       
-      print('✅ Restauración completada: $totalRecords registros');
+      debugPrint('✅ Restauración completada: $totalRecords registros');
       return true;
     } catch (e, stackTrace) {
-      print('❌ Error al restaurar backup: $e');
+      debugPrint('❌ Error al restaurar backup: $e');
       print(stackTrace);
       return false;
     }
@@ -268,7 +268,7 @@ class BackupService {
       
       return info;
     } catch (e) {
-      print('❌ Error al leer info de backup: $e');
+      debugPrint('❌ Error al leer info de backup: $e');
       return null;
     }
   }
@@ -293,7 +293,7 @@ class BackupService {
       
       return files;
     } catch (e) {
-      print('❌ Error al listar backups: $e');
+      debugPrint('❌ Error al listar backups: $e');
       return [];
     }
   }
@@ -304,19 +304,19 @@ class BackupService {
       final backups = await listAvailableBackups();
       
       if (backups.length <= keepCount) {
-        print('ℹ️ No hay backups antiguos para eliminar');
+        debugPrint('ℹ️ No hay backups antiguos para eliminar');
         return;
       }
       
       final toDelete = backups.skip(keepCount);
       for (final backup in toDelete) {
         await backup.delete();
-        print('🗑️ Backup antiguo eliminado: ${backup.path}');
+        debugPrint('🗑️ Backup antiguo eliminado: ${backup.path}');
       }
       
-      print('✅ Limpieza completada: ${toDelete.length} backups eliminados');
+      debugPrint('✅ Limpieza completada: ${toDelete.length} backups eliminados');
     } catch (e) {
-      print('❌ Error al limpiar backups: $e');
+      debugPrint('❌ Error al limpiar backups: $e');
     }
   }
 

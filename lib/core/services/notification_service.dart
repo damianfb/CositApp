@@ -52,7 +52,7 @@ class NotificationService {
   /// Callback cuando se toca una notificación
   void _onNotificationTapped(NotificationResponse response) {
     // TODO: Implementar navegación según el payload
-    print('Notificación tocada: ${response.payload}');
+    debugPrint('Notificación tocada: ${response.payload}');
   }
 
   /// Crea un canal de notificación para Android

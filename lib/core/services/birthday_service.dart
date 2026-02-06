@@ -194,9 +194,9 @@ class BirthdayService {
         );
       }
 
-      print('✅ ${birthdays.length} notificaciones de cumpleaños programadas');
+      debugPrint('✅ ${birthdays.length} notificaciones de cumpleaños programadas');
     } catch (e) {
-      print('❌ Error al programar notificaciones de cumpleaños: $e');
+      debugPrint('❌ Error al programar notificaciones de cumpleaños: $e');
     }
   }
 
@@ -206,7 +206,7 @@ class BirthdayService {
       final birthdays = await getBirthdaysThisMonth();
       
       if (birthdays.isEmpty) {
-        print('ℹ️ No hay cumpleaños este mes');
+        debugPrint('ℹ️ No hay cumpleaños este mes');
         return;
       }
 
@@ -222,9 +222,9 @@ class BirthdayService {
         payload: 'birthdays_month',
       );
 
-      print('✅ Notificación mensual de cumpleaños enviada');
+      debugPrint('✅ Notificación mensual de cumpleaños enviada');
     } catch (e) {
-      print('❌ Error al enviar notificación mensual: $e');
+      debugPrint('❌ Error al enviar notificación mensual: $e');
     }
   }
 
@@ -293,9 +293,9 @@ class BirthdayService {
         );
       }
 
-      print('✅ ${birthdays.length} notificaciones de cumpleaños de hoy enviadas');
+      debugPrint('✅ ${birthdays.length} notificaciones de cumpleaños de hoy enviadas');
     } catch (e) {
-      print('❌ Error al enviar notificaciones de hoy: $e');
+      debugPrint('❌ Error al enviar notificaciones de hoy: $e');
     }
   }
 

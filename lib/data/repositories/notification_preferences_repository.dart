@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-import '../../database/database_helper.dart';
-import '../../models/notification_preferences.dart';
+import '../database/database_helper.dart';
+import '../models/notification_preferences.dart';
 
 /// Repositorio para gestionar preferencias de notificaciones
 /// Usa una tabla simple key-value para almacenar configuración
