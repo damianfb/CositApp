@@ -442,6 +442,76 @@ El logo se muestra en:
 
 **Nota**: El archivo de logo se encuentra en `assets/images/cositasdelaabuela.png` (una copia también existe en `lib/data/resources/` para referencia).
 
+## 📦 Generar y Compartir el APK
+
+### Generar el APK de Release
+
+Para generar el archivo APK que puedes instalar en cualquier dispositivo Android:
+
+1. Abre una terminal en la raíz del proyecto
+2. Ejecuta el comando de build:
+
+```bash
+flutter build apk --release
+```
+
+3. El APK generado se encontrará en:
+```
+build/app/outputs/flutter-apk/app-release.apk
+```
+
+### Compartir el APK
+
+Una vez generado el APK, puedes compartirlo de varias formas:
+
+#### Opción 1: WhatsApp
+1. Abre WhatsApp en tu dispositivo
+2. Selecciona el contacto con quien quieres compartir
+3. Toca el ícono de adjuntar (📎)
+4. Selecciona "Documento" o "Archivo"
+5. Navega hasta `build/app/outputs/flutter-apk/`
+6. Selecciona `app-release.apk` y envía
+
+#### Opción 2: Email
+1. Abre tu cliente de email
+2. Crea un nuevo mensaje
+3. Adjunta el archivo `app-release.apk`
+4. Envía el email
+
+#### Opción 3: Google Drive / Cloud
+1. Sube el archivo `app-release.apk` a Google Drive, Dropbox u otro servicio de almacenamiento en la nube
+2. Comparte el enlace de descarga con quien necesite el APK
+
+### Instalar en Dispositivos Android (Samsung A32)
+
+Para instalar el APK en un dispositivo Samsung A32 u otro dispositivo Android:
+
+1. **Habilita la instalación desde fuentes desconocidas**:
+   - Ve a **Configuración** → **Seguridad y privacidad**
+   - Busca **Instalar aplicaciones desconocidas**
+   - Selecciona la aplicación desde la que instalarás (por ejemplo: Chrome, Archivos, WhatsApp)
+   - Activa **Permitir desde esta fuente**
+
+2. **Descarga o transfiere el APK**:
+   - Descarga el APK desde el link compartido, o
+   - Transfiere el archivo desde tu computadora al dispositivo (vía cable USB, Bluetooth, etc.)
+
+3. **Instala la aplicación**:
+   - Abre el administrador de archivos en tu dispositivo
+   - Navega hasta la carpeta de **Descargas** (o donde hayas guardado el APK)
+   - Toca el archivo `app-release.apk`
+   - Sigue las instrucciones en pantalla para completar la instalación
+
+4. **Abre la aplicación**:
+   - Una vez instalada, busca "CositApp" o "Cositas de la Abuela" en tu lista de aplicaciones
+   - Toca el ícono para abrir la app
+
+#### ⚠️ Notas Importantes
+
+- **Permisos**: La primera vez que abras la app, es posible que solicite permisos (cámara, almacenamiento, notificaciones). Acepta los permisos para que la app funcione correctamente.
+- **Actualizaciones**: Para actualizar la app a una nueva versión, repite el proceso de instalación con el nuevo APK. La app existente será reemplazada manteniendo tus datos.
+- **Seguridad**: Solo instala APKs de fuentes confiables. Si generas el APK tú mismo desde el código fuente, puedes estar seguro de su origen.
+
 ## 🗄️ Base de Datos
 
 ### Estructura de la Base de Datos
