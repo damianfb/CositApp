@@ -18,6 +18,7 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   final PedidoRepository _pedidoRepository = PedidoRepository();
   final ClienteRepository _clienteRepository = ClienteRepository();
+  static final DateFormat _dateFormat = DateFormat('d \'de\' MMMM', 'es');
   
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -118,7 +119,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedDayOrders = _getPedidosForDay(_selectedDay);
-    final dateFormat = DateFormat('d \'de\' MMMM', 'es');
 
     return Scaffold(
       appBar: AppBar(
@@ -204,7 +204,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     child: Row(
                       children: [
                         Text(
-                          '${selectedDayOrders.length} pedidos para ${dateFormat.format(_selectedDay)}',
+                          '${selectedDayOrders.length} pedidos para ${_dateFormat.format(_selectedDay)}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
