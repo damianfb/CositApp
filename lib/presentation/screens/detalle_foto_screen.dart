@@ -108,12 +108,12 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                     labelText: 'Tipo',
                     border: OutlineInputBorder(),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: 'catalogo', child: Text('Catálogo')),
-                    DropdownMenuItem(value: 'producto_final', child: Text('Producto Final')),
-                    DropdownMenuItem(value: 'proceso', child: Text('Proceso')),
-                    DropdownMenuItem(value: 'referencia', child: Text('Referencia')),
-                    DropdownMenuItem(value: 'otro', child: Text('Otro')),
+                  items: [
+                    DropdownMenuItem(value: Foto.tipoCatalogo, child: const Text('Catálogo')),
+                    DropdownMenuItem(value: Foto.tipoProductoFinal, child: const Text('Producto Final')),
+                    DropdownMenuItem(value: Foto.tipoProceso, child: const Text('Proceso')),
+                    DropdownMenuItem(value: Foto.tipoReferencia, child: const Text('Referencia')),
+                    DropdownMenuItem(value: Foto.tipoOtro, child: const Text('Otro')),
                   ],
                   onChanged: (value) {
                     setDialogState(() {
@@ -227,7 +227,7 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
   /// Muestra diálogo para asociar foto con un pedido
   Future<void> _asociarConPedido() async {
     try {
-      // Cargar pedidos recientes
+      // Cargar pedidos recientes con información de cliente
       final pedidos = await _pedidoRepository.getAll();
       
       if (!mounted) return;
@@ -242,6 +242,18 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
         return;
       }
 
+      // Cargar información de clientes para cada pedido
+      final pedidosConCliente = <Map<String, dynamic>>[];
+      for (final pedido in pedidos) {
+        final cliente = await _pedidoRepository.getClienteByPedido(pedido.id!);
+        pedidosConCliente.add({
+          'pedido': pedido,
+          'cliente': cliente,
+        });
+      }
+
+      if (!mounted) return;
+
       // Mostrar diálogo de selección
       final pedidoSeleccionado = await showDialog<Pedido>(
         context: context,
@@ -251,13 +263,16 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
             width: double.maxFinite,
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: pedidos.length,
+              itemCount: pedidosConCliente.length,
               itemBuilder: (context, index) {
-                final pedido = pedidos[index];
+                final item = pedidosConCliente[index];
+                final pedido = item['pedido'] as Pedido;
+                final cliente = item['cliente'] as Cliente?;
+                
                 return ListTile(
                   title: Text('Pedido #${pedido.id}'),
                   subtitle: Text(
-                    'Cliente ID: ${pedido.clienteId}\n'
+                    '${cliente?.nombre ?? "Cliente ID: ${pedido.clienteId}"}\n'
                     'Entrega: ${pedido.fechaEntrega.toString().substring(0, 10)}',
                   ),
                   trailing: Chip(

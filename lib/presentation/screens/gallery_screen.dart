@@ -178,7 +178,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
   void _mostrarDialogoNuevaFoto(String rutaArchivo) {
     final TextEditingController descripcionController = TextEditingController();
     String? categoriaSeleccionada;
-    String tipoSeleccionado = 'catalogo';
+    String tipoSeleccionado = Foto.tipoCatalogo;
     
     showDialog(
       context: context,
@@ -209,12 +209,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     labelText: 'Tipo',
                     border: OutlineInputBorder(),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: 'catalogo', child: Text('Catálogo')),
-                    DropdownMenuItem(value: 'producto_final', child: Text('Producto Final')),
-                    DropdownMenuItem(value: 'proceso', child: Text('Proceso')),
-                    DropdownMenuItem(value: 'referencia', child: Text('Referencia')),
-                    DropdownMenuItem(value: 'otro', child: Text('Otro')),
+                  items: [
+                    DropdownMenuItem(value: Foto.tipoCatalogo, child: const Text('Catálogo')),
+                    DropdownMenuItem(value: Foto.tipoProductoFinal, child: const Text('Producto Final')),
+                    DropdownMenuItem(value: Foto.tipoProceso, child: const Text('Proceso')),
+                    DropdownMenuItem(value: Foto.tipoReferencia, child: const Text('Referencia')),
+                    DropdownMenuItem(value: Foto.tipoOtro, child: const Text('Otro')),
                   ],
                   onChanged: (value) {
                     setDialogState(() {

@@ -340,6 +340,9 @@ class DatabaseHelper {
       ''');
       
       // Copiar datos existentes
+      // NOTA: Todas las fotos existentes se marcan como visibles (visible_en_galeria=1)
+      // y sin categoría (categoria=NULL) por defecto. Esto asume que las fotos
+      // previas deben ser visibles en la galería pública.
       await db.execute('''
         INSERT INTO foto_new (id, pedido_id, ruta_archivo, descripcion, tipo, fecha_creacion, visible_en_galeria, categoria)
         SELECT id, pedido_id, ruta_archivo, descripcion, tipo, fecha_creacion, 1, NULL

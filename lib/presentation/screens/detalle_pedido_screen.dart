@@ -884,7 +884,7 @@ class _DetallePedidoScreenState extends State<DetallePedidoScreen> {
       final foto = Foto(
         pedidoId: pedido.id!,
         rutaArchivo: rutaDestino,
-        tipo: 'producto_final',
+        tipo: Foto.tipoProductoFinal,
         fechaCreacion: DateTime.now(),
         visibleEnGaleria: true,
       );

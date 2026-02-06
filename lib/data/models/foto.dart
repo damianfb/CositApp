@@ -1,6 +1,13 @@
 /// Modelo de datos para Foto
 /// Representa fotos de la galería, opcionalmente asociadas a pedidos
 class Foto {
+  // Constantes para tipos de foto
+  static const String tipoProductoFinal = 'producto_final';
+  static const String tipoProceso = 'proceso';
+  static const String tipoReferencia = 'referencia';
+  static const String tipoCatalogo = 'catalogo';
+  static const String tipoOtro = 'otro';
+
   final int? id;
   final int? pedidoId; // Opcional: null si es foto de catálogo sin pedido asociado
   final String rutaArchivo; // ruta local del archivo de imagen
@@ -15,7 +22,7 @@ class Foto {
     this.pedidoId, // Ahora es opcional
     required this.rutaArchivo,
     this.descripcion,
-    this.tipo = 'producto_final',
+    this.tipo = tipoProductoFinal,
     required this.fechaCreacion,
     this.visibleEnGaleria = true,
     this.categoria,
@@ -42,7 +49,7 @@ class Foto {
       pedidoId: map['pedido_id'] as int?,
       rutaArchivo: map['ruta_archivo'] as String,
       descripcion: map['descripcion'] as String?,
-      tipo: map['tipo'] as String? ?? 'producto_final',
+      tipo: map['tipo'] as String? ?? Foto.tipoProductoFinal,
       fechaCreacion: DateTime.parse(map['fecha_creacion'] as String),
       visibleEnGaleria: (map['visible_en_galeria'] as int?) == 1,
       categoria: map['categoria'] as String?,
