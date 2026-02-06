@@ -8,6 +8,8 @@ import '../../data/repositories/pedido_repository.dart';
 import '../../data/repositories/cliente_repository.dart';
 import 'detalle_pedido_screen.dart';
 
+final DateFormat _dateFormat = DateFormat('d \'de\' MMMM', 'es');
+
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
 
@@ -18,7 +20,6 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   final PedidoRepository _pedidoRepository = PedidoRepository();
   final ClienteRepository _clienteRepository = ClienteRepository();
-  static final DateFormat _dateFormat = DateFormat('d \'de\' MMMM', 'es');
   
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
