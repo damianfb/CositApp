@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import 'clientes_screen.dart';
+import 'catalogo_screen.dart';
 
 /// Pantalla de configuración - Placeholder
 class SettingsScreen extends StatelessWidget {
@@ -34,12 +35,17 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: const Icon(Icons.cake),
-                  title: const Text('Productos'),
-                  subtitle: const Text('Gestionar productos y precios'),
+                  leading: const Icon(Icons.inventory),
+                  title: const Text('Gestión de Catálogo'),
+                  subtitle: const Text('Productos, bizcochuelos, rellenos y temáticas'),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
-                    // TODO: Navigate to products screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CatalogoScreen(),
+                      ),
+                    );
                   },
                 ),
                 const Divider(height: 1),
