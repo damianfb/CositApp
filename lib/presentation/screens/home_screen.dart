@@ -323,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildOrderCard(Pedido pedido, Cliente? cliente) {
     final dateFormat = DateFormat('dd/MM/yyyy');
-    final clienteName = cliente?.nombre ?? 'Cliente #${pedido.clienteId}';
+    final clientName = cliente?.nombre ?? 'Cliente #${pedido.clienteId}';
     
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -345,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      clienteName,
+                      clientName,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
