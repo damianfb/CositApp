@@ -6,13 +6,43 @@
 
 ## 📝 Descripción
 
-**Cositas de la Abuela** es una aplicación móvil para la gestión de pedidos de pastelería artesanal. La app permite a los usuarios gestionar pedidos, visualizar un calendario de entregas, mantener una galería de fotos de productos, y más.
+**Cositas de la Abuela** es una aplicación móvil para la gestión de pedidos de pastelería artesanal. La app permite a los usuarios gestionar pedidos, visualizar un calendario de entregas, mantener una galería de fotos de productos, recibir notificaciones de recordatorios, y realizar backup de datos.
 
-Esta es la **ETAPA 3** completada: Sistema completo de gestión de pedidos con dashboard, calendario, CRUD de clientes y catálogo.
+Esta es la **ETAPA 5** completada: Notificaciones locales, automatización de cumpleaños, backup/restore de datos y personalización con logo.
 
-## ✨ Características Actuales (Etapa 3 - COMPLETADA)
+## ✨ Características Actuales (Etapa 5 - COMPLETADA)
 
-### Gestión de Pedidos
+### 🔔 Notificaciones Locales (NUEVA)
+- ✅ **Recordatorios de entrega** configurables (X días antes, hora configurable)
+- ✅ **Recordatorios de preparación** para iniciar elaboración de pedidos
+- ✅ **Notificaciones de cumpleaños** con días de anticipación
+- ✅ **Resumen mensual de cumpleaños** automático
+- ✅ **Seguimiento post-venta** para pedir reseñas
+- ✅ **Configuración personalizada** por tipo de notificación
+- ✅ **Compatible con Android 13+ y One UI**
+
+### 🎂 Automatización de Cumpleaños (NUEVA)
+- ✅ **Lista de cumpleaños del mes** con contador de días
+- ✅ **Próximos cumpleaños** (hasta 60 días)
+- ✅ **Acciones rápidas**: llamar, enviar WhatsApp, crear pedido
+- ✅ **Notificaciones automáticas** programables
+- ✅ **Integración con clientes y familiares**
+
+### 💾 Backup y Restore (NUEVA)
+- ✅ **Exportar base de datos** completa a archivo comprimido
+- ✅ **Formato JSON con compresión gzip**
+- ✅ **Importar desde archivo** con confirmación
+- ✅ **Verificación de integridad** del backup
+- ✅ **Compartir backups** vía WhatsApp, email, etc.
+- ✅ **Información detallada** de cada backup (fecha, registros)
+- ✅ **Gestión de backups** (listar, eliminar, restaurar)
+
+### 🎨 Personalización (NUEVA)
+- ✅ **Logo oficial** en el icono de la app (launcher icon)
+- ✅ **Logo en la interfaz** (AppBar de pantalla principal)
+- ✅ **Branding coherente** en toda la aplicación
+
+### Gestión de Pedidos (Etapa 3)
 - ✅ **Dashboard funcional** con resumen de pedidos del día y próximos 7 días
 - ✅ **Wizard multi-paso** para crear pedidos (cliente, productos, fechas, confirmación)
 - ✅ **Detalle completo** de pedidos con cambio de estado y gestión de pagos
@@ -222,16 +252,18 @@ CositApp/
 - CRUD de catálogo (productos, bizcochuelos, rellenos, temáticas)
 - 13 pantallas funcionales nuevas
 
-### ⏳ Etapa 4: Galería de Fotos y Recordatorios
+### ✅ Etapa 4: Galería de Fotos - COMPLETADA
 - Captura de fotos con la cámara
 - Gestión de galería
 - Asociación de fotos con pedidos
-- Notificaciones de recordatorios
+- Compartir fotos en redes sociales
 
-### ⏳ Etapa 5: Funcionalidades Avanzadas
-- Exportación de datos (CSV/PDF)
-- Sincronización en la nube (opcional)
-- Estadísticas y reportes
+### ✅ Etapa 5: Notificaciones, Backup y Extras - COMPLETADA
+- Notificaciones locales configurables
+- Automatización de cumpleaños
+- Backup y restore de datos
+- Logo personalizado de la app
+- Acciones rápidas (llamar, WhatsApp)
 
 ## 📦 Dependencias
 
@@ -241,13 +273,21 @@ CositApp/
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.6      # Iconos iOS
-  sqflite: ^2.3.0              # Base de datos SQLite
-  path: ^1.8.3                 # Utilidades de path
-  path_provider: ^2.1.0        # Acceso a directorios del sistema
-  intl: ^0.19.0                # Formateo de fechas y números
-  table_calendar: ^3.0.9       # Widget de calendario
-  flutter_localizations:        # Localización en español
+  cupertino_icons: ^1.0.6              # Iconos iOS
+  sqflite: ^2.3.0                      # Base de datos SQLite
+  path: ^1.8.3                         # Utilidades de path
+  path_provider: ^2.1.0                # Acceso a directorios del sistema
+  intl: 0.20.2                         # Formateo de fechas y números
+  table_calendar: ^3.0.9               # Widget de calendario
+  image_picker: ^1.0.7                 # Captura de fotos
+  share_plus: ^7.2.1                   # Compartir archivos
+  permission_handler: ^11.2.0          # Permisos del sistema
+  flutter_local_notifications: ^17.0.0 # Notificaciones locales
+  timezone: ^0.9.2                     # Zonas horarias
+  file_picker: ^8.0.0+1                # Selector de archivos
+  archive: ^3.4.10                     # Compresión de archivos
+  url_launcher: ^6.2.4                 # Abrir URLs
+  flutter_localizations:               # Localización en español
     sdk: flutter
 ```
 
@@ -257,13 +297,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0        # Análisis estático de código
+  flutter_lints: ^3.0.0              # Análisis estático de código
+  flutter_launcher_icons: ^0.13.1    # Generación de iconos
 ```
 
-## 📱 Pantallas Implementadas (14 pantallas)
+## 📱 Pantallas Implementadas (20 pantallas)
 
 ### Dashboard y Pedidos
-1. **HomeScreen** - Dashboard con resúmenes y lista de pedidos
+1. **HomeScreen** - Dashboard con resúmenes y lista de pedidos (con logo)
 2. **NuevoPedidoScreen** - Wizard multi-paso para crear pedidos
 3. **DetallePedidoScreen** - Detalle completo con gestión de estado y pagos
 4. **CalendarScreen** - Calendario mensual con marcadores de entregas
@@ -280,9 +321,126 @@ dev_dependencies:
 11. **RellenosScreen** - CRUD de tipos de relleno
 12. **TematicasScreen** - CRUD de temáticas de decoración
 
-### Otras Pantallas
-13. **GalleryScreen** - Galería de fotos (placeholder)
-14. **SettingsScreen** - Configuración y menús de gestión
+### Galería y Fotos
+13. **GalleryScreen** - Galería de fotos con filtros
+14. **DetalleFotoScreen** - Detalle y edición de fotos
+
+### Notificaciones y Backup (ETAPA 5)
+15. **NotificationSettingsScreen** - Configuración de notificaciones
+16. **BirthdaysScreen** - Lista de cumpleaños con acciones rápidas
+17. **BackupRestoreScreen** - Gestión de backups
+
+### Configuración
+18. **SettingsScreen** - Menú de configuración principal
+19. **CatalogoScreen** - Submenu de productos y catálogo
+20. **ClientesScreen** - Submenu de gestión de clientes
+
+## 🔔 Guía de Uso: Notificaciones
+
+### Configurar Notificaciones
+
+1. Ir a **Configuración → Notificaciones**
+2. Activar/desactivar cada tipo de notificación:
+   - **Entrega**: Días antes de la entrega
+   - **Preparación**: Días antes de iniciar preparación
+   - **Cumpleaños**: Días antes del cumpleaños
+   - **Post-Venta**: Días después de la entrega
+3. Ajustar días de anticipación y hora
+4. Guardar configuración
+
+### Probar Notificaciones
+
+- Usar el botón **"Probar"** en la pantalla de configuración
+- Las notificaciones aparecerán según permisos del sistema
+- En Android 13+, los permisos se solicitan automáticamente
+
+### Ver Cumpleaños
+
+1. Ir a **Configuración → Cumpleaños**
+2. Alternar entre "Este Mes" y "Próximos 60 días"
+3. Ver días hasta cada cumpleaños
+4. Usar acciones rápidas:
+   - **Llamar**: Abre el marcador telefónico
+   - **WhatsApp**: Envía mensaje personalizado
+   - **Pedido**: Crea nuevo pedido
+
+### Programar Recordatorios de Cumpleaños
+
+1. Ir a **Configuración → Notificaciones**
+2. Scroll hasta **"Recordatorios de Cumpleaños"**
+3. Tap en **"Programar cumpleaños"**
+4. Se programarán automáticamente según configuración
+
+## 💾 Guía de Uso: Backup y Restore
+
+### Crear Backup
+
+1. Ir a **Configuración → Backup y Restore**
+2. Tap en **"Crear Backup"**
+3. Se generará un archivo `.cositbackup` comprimido
+4. Opción de compartir vía WhatsApp, email, etc.
+
+### Restaurar Backup
+
+⚠️ **ADVERTENCIA**: Restaurar un backup reemplaza TODOS los datos actuales.
+
+1. Ir a **Configuración → Backup y Restore**
+2. Opción 1: Tap en backup existente → "Restaurar"
+3. Opción 2: Tap **"Restaurar desde Archivo"** → Seleccionar archivo
+4. Confirmar la acción
+5. Esperar a que termine la restauración
+6. Se recomienda reiniciar la app
+
+### Compartir Backup
+
+1. En la lista de backups, tap en el menú (⋮)
+2. Seleccionar **"Compartir"**
+3. Elegir aplicación para compartir
+4. El backup se puede guardar en Drive, enviarse por email, etc.
+
+### Ver Información del Backup
+
+1. En la lista de backups, tap en el menú (⋮)
+2. Seleccionar **"Ver información"**
+3. Ver fecha, versión y cantidad de registros por tabla
+
+### Eliminar Backups Antiguos
+
+1. En la lista de backups, tap en el menú (⋮)
+2. Seleccionar **"Eliminar"**
+3. Confirmar la acción
+
+## 🎨 Personalización: Icono de la App
+
+### Generar Iconos de Launcher
+
+El proyecto está configurado para usar el logo oficial desde `assets/images/cositasdelaabuela.png`:
+
+```yaml
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/cositasdelaabuela.png"
+  min_sdk_android: 24
+  adaptive_icon_background: "#F8BBD9"
+  adaptive_icon_foreground: "assets/images/cositasdelaabuela.png"
+```
+
+Para generar los iconos:
+
+```bash
+flutter pub run flutter_launcher_icons
+```
+
+Esto creará todos los iconos necesarios para Android en diferentes resoluciones.
+
+### Logo en la Interfaz
+
+El logo se muestra en:
+- **AppBar del Home**: Esquina superior izquierda junto al nombre
+- **Launcher Icon**: Icono de la aplicación en el dispositivo
+
+**Nota**: El archivo de logo se encuentra en `assets/images/cositasdelaabuela.png` (una copia también existe en `lib/data/resources/` para referencia).
 
 ## 🗄️ Base de Datos
 

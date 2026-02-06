@@ -19,11 +19,27 @@ dependencies:
   image_picker: ^1.0.7
   share_plus: ^7.2.1
   permission_handler: ^11.2.0
+  flutter_local_notifications: ^17.0.0
+  timezone: ^0.9.2
+  file_picker: ^8.0.0+1
+  archive: ^3.4.10
+  url_launcher: ^6.2.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/cositasdelaabuela.png
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/cositasdelaabuela.png"
+  min_sdk_android: 24
+  adaptive_icon_background: "#F8BBD9"
+  adaptive_icon_foreground: "assets/images/cositasdelaabuela.png"

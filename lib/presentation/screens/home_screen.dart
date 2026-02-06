@@ -49,7 +49,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppConstants.appName),
+        title: Row(
+          children: [
+            // Logo
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/images/cositasdelaabuela.png',
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.cake, size: 40);
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text(AppConstants.appName),
+          ],
+        ),
         elevation: 2,
       ),
       body: RefreshIndicator(

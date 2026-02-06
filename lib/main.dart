@@ -5,6 +5,7 @@ import 'data/database/database_helper.dart';
 import 'data/repositories/cliente_repository.dart';
 import 'data/repositories/producto_repository.dart';
 import 'data/repositories/pedido_repository.dart';
+import 'core/services/notification_service.dart';
 
 /// Punto de entrada de la aplicación
 void main() async {
@@ -16,6 +17,9 @@ void main() async {
   
   // Inicializar la base de datos
   await _initializeDatabase();
+  
+  // Inicializar servicio de notificaciones
+  await _initializeNotifications();
   
   // Ejecutar la aplicación
   runApp(const App());
@@ -72,5 +76,30 @@ Future<void> _initializeDatabase() async {
     
   } catch (e) {
     print('❌ Error al inicializar base de datos: $e');
+  }
+}
+
+/// Inicializa el servicio de notificaciones
+Future<void> _initializeNotifications() async {
+  try {
+    print('\n🔔 Inicializando servicio de notificaciones...');
+    
+    final notificationService = NotificationService();
+    await notificationService.initialize();
+    await notificationService.createNotificationChannels();
+    
+    // Solicitar permisos (requerido en Android 13+)
+    final hasPermission = await notificationService.requestPermissions();
+    if (hasPermission) {
+      print('✅ Permisos de notificación concedidos');
+    } else {
+      print('⚠️ Permisos de notificación denegados');
+    }
+    
+    print('✅ Servicio de notificaciones inicializado');
+    print('━' * 50);
+    
+  } catch (e) {
+    print('❌ Error al inicializar notificaciones: $e');
   }
 }
