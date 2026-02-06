@@ -6,6 +6,31 @@ import '../../data/repositories/cliente_repository.dart';
 import '../../data/models/pedido.dart';
 import '../../data/models/cliente.dart';
 
+/// Clase para datos del dashboard
+class _DashboardData {
+  final List<Pedido> todayOrders;
+  final double todayTotal;
+  final List<Pedido> next7DaysOrders;
+  final double next7DaysTotal;
+  final List<Pedido> pendingOrders;
+  final List<Pedido> confirmedOrders;
+  final List<Pedido> inProgressOrders;
+  final List<Pedido> recentOrders;
+  final Map<int, Cliente> clientesMap;
+
+  _DashboardData({
+    required this.todayOrders,
+    required this.todayTotal,
+    required this.next7DaysOrders,
+    required this.next7DaysTotal,
+    required this.pendingOrders,
+    required this.confirmedOrders,
+    required this.inProgressOrders,
+    required this.recentOrders,
+    required this.clientesMap,
+  });
+}
+
 /// Pantalla de inicio - Dashboard de pedidos
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: () async {
           setState(() {});
         },
-        child: FutureBuilder<Map<String, dynamic>>(
+        child: FutureBuilder<_DashboardData>(
           future: _loadDashboardData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -70,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<Map<String, dynamic>> _loadDashboardData() async {
+  Future<_DashboardData> _loadDashboardData() async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final tomorrow = today.add(const Duration(days: 1));
@@ -90,14 +115,15 @@ class _HomeScreenState extends State<HomeScreen> {
     // Obtener pedidos recientes
     final recentOrders = await _pedidoRepository.getRecent(limit: 10);
     
-    // Cargar clientes para los pedidos recientes
+    // Cargar clientes en paralelo para los pedidos recientes
+    final uniqueClienteIds = recentOrders.map((p) => p.clienteId).toSet();
+    final clienteFutures = uniqueClienteIds.map((id) => _clienteRepository.getById(id));
+    final clientes = await Future.wait(clienteFutures);
+    
     final Map<int, Cliente> clientesMap = {};
-    for (final pedido in recentOrders) {
-      if (!clientesMap.containsKey(pedido.clienteId)) {
-        final cliente = await _clienteRepository.getById(pedido.clienteId);
-        if (cliente != null) {
-          clientesMap[pedido.clienteId] = cliente;
-        }
+    for (final cliente in clientes) {
+      if (cliente != null) {
+        clientesMap[cliente.id!] = cliente;
       }
     }
 
@@ -105,20 +131,20 @@ class _HomeScreenState extends State<HomeScreen> {
     final todayTotal = todayOrders.fold<double>(0, (sum, p) => sum + p.precioTotal);
     final next7DaysTotal = next7DaysOrders.fold<double>(0, (sum, p) => sum + p.precioTotal);
 
-    return {
-      'todayOrders': todayOrders,
-      'todayTotal': todayTotal,
-      'next7DaysOrders': next7DaysOrders,
-      'next7DaysTotal': next7DaysTotal,
-      'pendingOrders': pendingOrders,
-      'confirmedOrders': confirmedOrders,
-      'inProgressOrders': inProgressOrders,
-      'recentOrders': recentOrders,
-      'clientesMap': clientesMap,
-    };
+    return _DashboardData(
+      todayOrders: todayOrders,
+      todayTotal: todayTotal,
+      next7DaysOrders: next7DaysOrders,
+      next7DaysTotal: next7DaysTotal,
+      pendingOrders: pendingOrders,
+      confirmedOrders: confirmedOrders,
+      inProgressOrders: inProgressOrders,
+      recentOrders: recentOrders,
+      clientesMap: clientesMap,
+    );
   }
 
-  Widget _buildSummaryCards(Map<String, dynamic> data) {
+  Widget _buildSummaryCards(_DashboardData data) {
     return Column(
       children: [
         Row(
@@ -126,8 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildSummaryCard(
                 'Hoy',
-                data['todayOrders'].length,
-                data['todayTotal'],
+                data.todayOrders.length,
+                data.todayTotal,
                 Icons.today,
                 Colors.blue,
               ),
@@ -136,8 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildSummaryCard(
                 'Próximos 7 días',
-                data['next7DaysOrders'].length,
-                data['next7DaysTotal'],
+                data.next7DaysOrders.length,
+                data.next7DaysTotal,
                 Icons.calendar_month,
                 Colors.green,
               ),
@@ -150,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildStatusCard(
                 'Pendientes',
-                data['pendingOrders'].length,
+                data.pendingOrders.length,
                 Colors.orange,
               ),
             ),
@@ -158,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildStatusCard(
                 'Confirmados',
-                data['confirmedOrders'].length,
+                data.confirmedOrders.length,
                 Colors.blue,
               ),
             ),
@@ -166,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildStatusCard(
                 'En Proceso',
-                data['inProgressOrders'].length,
+                data.inProgressOrders.length,
                 Colors.purple,
               ),
             ),
@@ -259,10 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRecentOrdersSection(Map<String, dynamic> data) {
-    final recentOrders = data['recentOrders'] as List<Pedido>;
-    final clientesMap = data['clientesMap'] as Map<int, Cliente>;
-
+  Widget _buildRecentOrdersSection(_DashboardData data) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -274,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        if (recentOrders.isEmpty)
+        if (data.recentOrders.isEmpty)
           Card(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -290,8 +313,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           )
         else
-          ...recentOrders.map((pedido) {
-            final cliente = clientesMap[pedido.clienteId];
+          ...data.recentOrders.map((pedido) {
+            final cliente = data.clientesMap[pedido.clienteId];
             return _buildOrderCard(pedido, cliente);
           }).toList(),
       ],
