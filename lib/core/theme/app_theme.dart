@@ -6,7 +6,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      
+
       // Esquema de colores
       colorScheme: ColorScheme.light(
         primary: AppConstants.primaryColor,
@@ -19,11 +19,11 @@ class AppTheme {
         onSurface: AppConstants.textColor,
         onBackground: AppConstants.textColor,
       ),
-      
+
       // Colores primarios
       primaryColor: AppConstants.primaryColor,
       scaffoldBackgroundColor: AppConstants.backgroundColor,
-      
+
       // AppBar theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppConstants.primaryColor,
@@ -36,7 +36,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
         ),
       ),
-      
+
       // Tipografía
       textTheme: TextTheme(
         displayLarge: TextStyle(
@@ -82,7 +82,7 @@ class AppTheme {
           color: AppConstants.textColor.withOpacity(0.7),
         ),
       ),
-      
+
       // Botones
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -95,7 +95,7 @@ class AppTheme {
           elevation: 2,
         ),
       ),
-      
+
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppConstants.accentColor,
@@ -106,14 +106,14 @@ class AppTheme {
           side: BorderSide(color: AppConstants.accentColor, width: 2),
         ),
       ),
-      
+
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppConstants.accentColor,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         ),
       ),
-      
+
       // FloatingActionButton
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: AppConstants.accentColor,
@@ -123,7 +123,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(16),
         ),
       ),
-      
+
       // Cards
       cardTheme: CardThemeData(
         color: Colors.white,
@@ -133,7 +133,7 @@ class AppTheme {
         ),
         margin: const EdgeInsets.all(8),
       ),
-      
+
       // Input decoration
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -144,7 +144,8 @@ class AppTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppConstants.primaryColor.withOpacity(0.5)),
+          borderSide:
+              BorderSide(color: AppConstants.primaryColor.withOpacity(0.5)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -154,9 +155,10 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.red.shade400),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
-      
+
       // Bottom Navigation Bar
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
