@@ -6,6 +6,7 @@ import '../../data/repositories/cliente_repository.dart';
 import '../../data/models/pedido.dart';
 import '../../data/models/cliente.dart';
 import 'nuevo_pedido_screen.dart';
+import 'detalle_pedido_screen.dart';
 
 /// Clase para datos del dashboard
 class _DashboardData {
@@ -335,11 +336,16 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Ver detalle del pedido #${pedido.id} - Próximamente'),
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => DetallePedidoScreen(pedidoId: pedido.id!),
             ),
-          );
+          ).then((result) {
+            // Refrescar si se eliminó el pedido o hubo cambios
+            if (result == true || result == null) {
+              setState(() {});
+            }
+          });
         },
         child: Padding(
           padding: const EdgeInsets.all(16),

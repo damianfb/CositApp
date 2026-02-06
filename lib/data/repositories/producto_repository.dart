@@ -8,6 +8,10 @@ import 'base_repository.dart';
 /// Repositorio para gestión de Productos
 /// Proporciona operaciones CRUD y consultas específicas para productos
 class ProductoRepository extends BaseRepository<Producto> {
+  final BizcochueloRepository _bizcochueloRepo = BizcochueloRepository();
+  final RellenoRepository _rellenoRepo = RellenoRepository();
+  final TematicaRepository _tematicaRepo = TematicaRepository();
+
   @override
   String get tableName => 'producto';
 
@@ -51,6 +55,21 @@ class ProductoRepository extends BaseRepository<Producto> {
       orderBy: 'nombre ASC',
     );
     return List.generate(maps.length, (i) => fromMap(maps[i]));
+  }
+
+  /// Obtiene un bizcochuelo por ID
+  Future<Bizcochuelo?> getBizcochueloById(int id) async {
+    return await _bizcochueloRepo.getById(id);
+  }
+
+  /// Obtiene un relleno por ID
+  Future<Relleno?> getRellenoById(int id) async {
+    return await _rellenoRepo.getById(id);
+  }
+
+  /// Obtiene una temática por ID
+  Future<Tematica?> getTematicaById(int id) async {
+    return await _tematicaRepo.getById(id);
   }
 }
 
