@@ -116,16 +116,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final recentOrders = await _pedidoRepository.getRecent(limit: 10);
     
     // Cargar clientes en paralelo para los pedidos recientes
-    final uniqueClienteIds = recentOrders.map((p) => p.clienteId).toSet();
-    final clienteFutures = uniqueClienteIds.map((id) => _clienteRepository.getById(id));
-    final clientes = await Future.wait(clienteFutures);
+    final uniqueClienteIds = recentOrders.map((p) => p.clienteId).toSet().toList();
+    final clienteFutures = uniqueClienteIds.map((id) async {
+      final cliente = await _clienteRepository.getById(id);
+      return MapEntry(id, cliente);
+    });
+    final clienteEntries = await Future.wait(clienteFutures);
     
-    final Map<int, Cliente> clientesMap = {};
-    for (final cliente in clientes) {
-      if (cliente != null) {
-        clientesMap[cliente.id!] = cliente;
-      }
-    }
+    final Map<int, Cliente> clientesMap = Map.fromEntries(
+      clienteEntries.where((entry) => entry.value != null).map((entry) => MapEntry(entry.key, entry.value!)),
+    );
 
     // Calcular totales
     final todayTotal = todayOrders.fold<double>(0, (sum, p) => sum + p.precioTotal);
@@ -323,6 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildOrderCard(Pedido pedido, Cliente? cliente) {
     final dateFormat = DateFormat('dd/MM/yyyy');
+    final clienteName = cliente?.nombre ?? 'Cliente #${pedido.clienteId}';
     
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -344,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      cliente?.nombre ?? 'Cliente #${pedido.clienteId}',
+                      clienteName,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
