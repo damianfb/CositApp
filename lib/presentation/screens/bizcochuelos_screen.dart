@@ -145,7 +145,8 @@ class _BizcochuelosScreenState extends State<BizcochuelosScreen> {
                                   '¿Desea eliminar "${bizcochuelo.nombre}"?'),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
                                   child: const Text('Cancelar'),
                                 ),
                                 TextButton(
@@ -198,7 +199,8 @@ class _BizcochuelosScreenState extends State<BizcochuelosScreen> {
                                               ),
                                             ),
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 8,
                                                 vertical: 4,
                                               ),
@@ -224,7 +226,8 @@ class _BizcochuelosScreenState extends State<BizcochuelosScreen> {
                                             ),
                                           ],
                                         ),
-                                        if (bizcochuelo.descripcion?.isNotEmpty ==
+                                        if (bizcochuelo
+                                                .descripcion?.isNotEmpty ==
                                             true) ...[
                                           const SizedBox(height: 4),
                                           Text(
@@ -318,7 +321,7 @@ class _BizcochueloFormDialogState extends State<_BizcochueloFormDialog> {
       if (widget.bizcochuelo == null) {
         await _repository.insert(bizcochuelo);
       } else {
-        await _repository.update(bizcochuelo);
+        await _repository.update(bizcochuelo, bizcochuelo.id!);
       }
 
       widget.onSave(bizcochuelo);

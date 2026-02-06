@@ -141,11 +141,12 @@ class _ProductosScreenState extends State<ProductosScreen> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text('Confirmar eliminación'),
-                              content: Text(
-                                  '¿Desea eliminar "${producto.nombre}"?'),
+                              content:
+                                  Text('¿Desea eliminar "${producto.nombre}"?'),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
                                   child: const Text('Cancelar'),
                                 ),
                                 TextButton(
@@ -198,7 +199,8 @@ class _ProductosScreenState extends State<ProductosScreen> {
                                               ),
                                             ),
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 8,
                                                 vertical: 4,
                                               ),
@@ -349,7 +351,7 @@ class _ProductoFormDialogState extends State<_ProductoFormDialog> {
       if (widget.producto == null) {
         await _repository.insert(producto);
       } else {
-        await _repository.update(producto);
+        await _repository.update(producto, producto.id!);
       }
 
       widget.onSave(producto);
@@ -366,7 +368,8 @@ class _ProductoFormDialogState extends State<_ProductoFormDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.producto == null ? 'Nuevo Producto' : 'Editar Producto'),
+      title:
+          Text(widget.producto == null ? 'Nuevo Producto' : 'Editar Producto'),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,

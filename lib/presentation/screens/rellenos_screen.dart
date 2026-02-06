@@ -140,11 +140,12 @@ class _RellenosScreenState extends State<RellenosScreen> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text('Confirmar eliminación'),
-                              content: Text(
-                                  '¿Desea eliminar "${relleno.nombre}"?'),
+                              content:
+                                  Text('¿Desea eliminar "${relleno.nombre}"?'),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
                                   child: const Text('Cancelar'),
                                 ),
                                 TextButton(
@@ -197,7 +198,8 @@ class _RellenosScreenState extends State<RellenosScreen> {
                                               ),
                                             ),
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 8,
                                                 vertical: 4,
                                               ),
@@ -317,7 +319,7 @@ class _RellenoFormDialogState extends State<_RellenoFormDialog> {
       if (widget.relleno == null) {
         await _repository.insert(relleno);
       } else {
-        await _repository.update(relleno);
+        await _repository.update(relleno, relleno.id!);
       }
 
       widget.onSave(relleno);

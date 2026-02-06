@@ -140,11 +140,12 @@ class _TematicasScreenState extends State<TematicasScreen> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text('Confirmar eliminación'),
-                              content: Text(
-                                  '¿Desea eliminar "${tematica.nombre}"?'),
+                              content:
+                                  Text('¿Desea eliminar "${tematica.nombre}"?'),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
                                   child: const Text('Cancelar'),
                                 ),
                                 TextButton(
@@ -197,7 +198,8 @@ class _TematicasScreenState extends State<TematicasScreen> {
                                               ),
                                             ),
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal: 8,
                                                 vertical: 4,
                                               ),
@@ -317,7 +319,7 @@ class _TematicaFormDialogState extends State<_TematicaFormDialog> {
       if (widget.tematica == null) {
         await _repository.insert(tematica);
       } else {
-        await _repository.update(tematica);
+        await _repository.update(tematica, tematica.id!);
       }
 
       widget.onSave(tematica);
@@ -334,7 +336,8 @@ class _TematicaFormDialogState extends State<_TematicaFormDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.tematica == null ? 'Nueva Temática' : 'Editar Temática'),
+      title:
+          Text(widget.tematica == null ? 'Nueva Temática' : 'Editar Temática'),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
