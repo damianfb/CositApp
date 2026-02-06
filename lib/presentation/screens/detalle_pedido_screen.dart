@@ -778,6 +778,23 @@ class _DetallePedidoScreenState extends State<DetallePedidoScreen> {
     );
   }
 
+  String _getStatusLabel(String estado) {
+    switch (estado) {
+      case 'pendiente':
+        return 'Pendiente';
+      case 'confirmado':
+        return 'Confirmado';
+      case 'en_proceso':
+        return 'En Proceso';
+      case 'completado':
+        return 'Completado';
+      case 'cancelado':
+        return 'Cancelado';
+      default:
+        return estado;
+    }
+  }
+
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       children: [
@@ -846,12 +863,13 @@ class _DetallePedidoScreenState extends State<DetallePedidoScreen> {
   }
 
   Future<void> _changeStatus(Pedido pedido, String nuevoEstado) async {
+    final estadoLabel = _getStatusLabel(nuevoEstado);
     final confirm = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirmar cambio'),
-          content: Text('¿Cambiar estado del pedido a "$nuevoEstado"?'),
+          content: Text('¿Cambiar estado del pedido a "$estadoLabel"?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
