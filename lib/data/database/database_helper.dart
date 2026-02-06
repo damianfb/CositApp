@@ -24,7 +24,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2, // Incrementada versión para migración de foto
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -186,11 +186,13 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE foto (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        pedido_id INTEGER NOT NULL,
+        pedido_id INTEGER,
         ruta_archivo TEXT NOT NULL,
         descripcion TEXT,
         tipo TEXT NOT NULL DEFAULT 'producto_final',
         fecha_creacion TEXT NOT NULL,
+        visible_en_galeria INTEGER NOT NULL DEFAULT 1,
+        categoria TEXT,
         FOREIGN KEY (pedido_id) REFERENCES pedido (id) ON DELETE CASCADE
       )
     ''');
@@ -316,11 +318,42 @@ class DatabaseHelper {
 
   /// Maneja las migraciones de versiones de la base de datos
   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
-    // Aquí se manejarán las migraciones futuras
-    // Ejemplo:
-    // if (oldVersion < 2) {
-    //   await db.execute('ALTER TABLE ...');
-    // }
+    print('🔄 Migrando base de datos de v$oldVersion a v$newVersion');
+    
+    // Migración de v1 a v2: Agregar campos a tabla foto
+    if (oldVersion < 2) {
+      print('   📸 Actualizando tabla foto...');
+      
+      // SQLite no soporta ALTER COLUMN, necesitamos recrear la tabla
+      await db.execute('''
+        CREATE TABLE foto_new (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          pedido_id INTEGER,
+          ruta_archivo TEXT NOT NULL,
+          descripcion TEXT,
+          tipo TEXT NOT NULL DEFAULT 'producto_final',
+          fecha_creacion TEXT NOT NULL,
+          visible_en_galeria INTEGER NOT NULL DEFAULT 1,
+          categoria TEXT,
+          FOREIGN KEY (pedido_id) REFERENCES pedido (id) ON DELETE CASCADE
+        )
+      ''');
+      
+      // Copiar datos existentes
+      await db.execute('''
+        INSERT INTO foto_new (id, pedido_id, ruta_archivo, descripcion, tipo, fecha_creacion, visible_en_galeria, categoria)
+        SELECT id, pedido_id, ruta_archivo, descripcion, tipo, fecha_creacion, 1, NULL
+        FROM foto
+      ''');
+      
+      // Eliminar tabla vieja y renombrar la nueva
+      await db.execute('DROP TABLE foto');
+      await db.execute('ALTER TABLE foto_new RENAME TO foto');
+      
+      print('   ✅ Tabla foto actualizada con éxito');
+    }
+    
+    print('✅ Migración completada');
   }
 
   /// Cierra la conexión a la base de datos
