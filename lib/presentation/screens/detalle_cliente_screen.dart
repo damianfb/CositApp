@@ -551,7 +551,7 @@ class _DetalleClienteScreenState extends State<DetalleClienteScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => NuevoPedidoScreen(clienteId: widget.clienteId),
+        builder: (context) => const NuevoPedidoScreen(),
       ),
     );
   }
