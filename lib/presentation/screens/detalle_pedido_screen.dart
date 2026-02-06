@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import '../../data/models/pedido.dart';
 import '../../data/models/pedido_detalle.dart';
 import '../../data/models/cliente.dart';
@@ -8,9 +12,12 @@ import '../../data/models/bizcochuelo.dart';
 import '../../data/models/tematica.dart';
 import '../../data/models/relleno.dart';
 import '../../data/models/detalle_relleno.dart';
+import '../../data/models/foto.dart';
 import '../../data/repositories/pedido_repository.dart';
 import '../../data/repositories/cliente_repository.dart';
 import '../../data/repositories/producto_repository.dart';
+import '../../data/repositories/foto_repository.dart';
+import 'detalle_foto_screen.dart';
 
 class _DetalleData {
   final Pedido pedido;
@@ -58,6 +65,8 @@ class _DetallePedidoScreenState extends State<DetallePedidoScreen> {
   final ProductoRepository _productoRepository = ProductoRepository();
   final PedidoDetalleRepository _detalleRepository = PedidoDetalleRepository();
   final DetalleRellenoRepository _rellenoRepository = DetalleRellenoRepository();
+  final FotoRepository _fotoRepository = FotoRepository();
+  final ImagePicker _imagePicker = ImagePicker();
 
   // Checklist postventa
   final Map<String, bool> _checklistPostventa = {
@@ -144,6 +153,8 @@ class _DetallePedidoScreenState extends State<DetallePedidoScreen> {
                   _buildPaymentSection(data.pedido),
                   const SizedBox(height: 16),
                   _buildStatusSection(data.pedido),
+                  const SizedBox(height: 16),
+                  _buildPhotosSection(data.pedido),
                   if (data.pedido.estado == 'completado') ...[
                     const SizedBox(height: 16),
                     _buildPostventaSection(),
@@ -693,6 +704,214 @@ class _DetallePedidoScreenState extends State<DetallePedidoScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildPhotosSection(Pedido pedido) {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: const [
+                    Icon(Icons.photo_library, size: 20),
+                    SizedBox(width: 8),
+                    Text(
+                      'Fotos del Pedido',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add_a_photo),
+                  onPressed: () => _agregarFoto(pedido),
+                  tooltip: 'Agregar foto',
+                ),
+              ],
+            ),
+            const Divider(height: 16),
+            FutureBuilder<List<Foto>>(
+              future: _fotoRepository.getByPedido(pedido.id!),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+
+                final fotos = snapshot.data!;
+                if (fotos.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Icon(Icons.photo_library_outlined, 
+                            size: 48, 
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'No hay fotos asociadas a este pedido',
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                return SizedBox(
+                  height: 120,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: fotos.length,
+                    itemBuilder: (context, index) {
+                      final foto = fotos[index];
+                      return _buildFotoThumbnail(foto);
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFotoThumbnail(Foto foto) {
+    final file = File(foto.rutaArchivo);
+    
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetalleFotoScreen(
+              foto: foto,
+              onFotoActualizada: () => setState(() {}),
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: 100,
+        margin: const EdgeInsets.only(right: 8),
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: file.existsSync()
+              ? Image.file(
+                  file,
+                  fit: BoxFit.cover,
+                )
+              : Container(
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.broken_image, color: Colors.grey),
+                ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _agregarFoto(Pedido pedido) async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Tomar foto con la cámara'),
+              onTap: () => Navigator.pop(context, ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Seleccionar de la galería'),
+              onTap: () => Navigator.pop(context, ImageSource.gallery),
+            ),
+            ListTile(
+              leading: const Icon(Icons.cancel),
+              title: const Text('Cancelar'),
+              onTap: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (source == null) return;
+
+    try {
+      final XFile? image = await _imagePicker.pickImage(
+        source: source,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 85,
+      );
+
+      if (image == null) return;
+
+      // Guardar foto
+      final Directory appDocDir = await getApplicationDocumentsDirectory();
+      final String fotosDir = path.join(appDocDir.path, 'fotos');
+      final Directory fotosDirPath = Directory(fotosDir);
+      if (!await fotosDirPath.exists()) {
+        await fotosDirPath.create(recursive: true);
+      }
+
+      final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      final String extension = path.extension(image.path);
+      final String nombreArchivo = 'foto_$timestamp$extension';
+      final String rutaDestino = path.join(fotosDir, nombreArchivo);
+
+      final File archivoOriginal = File(image.path);
+      await archivoOriginal.copy(rutaDestino);
+
+      // Guardar en base de datos
+      final foto = Foto(
+        pedidoId: pedido.id!,
+        rutaArchivo: rutaDestino,
+        tipo: 'producto_final',
+        fechaCreacion: DateTime.now(),
+        visibleEnGaleria: true,
+      );
+
+      await _fotoRepository.insert(foto);
+
+      setState(() {});
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ Foto agregada al pedido'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      print('❌ Error agregando foto: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   Widget _buildObservacionesCard(String observaciones) {
