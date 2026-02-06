@@ -130,6 +130,27 @@ CositApp/
 │   │   │   └── app_constants.dart         # Constantes de la app
 │   │   └── theme/
 │   │       └── app_theme.dart             # Tema personalizado
+│   ├── data/                              # 🆕 Capa de datos
+│   │   ├── database/
+│   │   │   └── database_helper.dart       # Helper de SQLite
+│   │   ├── models/                        # 12 modelos de datos
+│   │   │   ├── cliente.dart
+│   │   │   ├── familiar.dart
+│   │   │   ├── producto.dart
+│   │   │   ├── bizcochuelo.dart
+│   │   │   ├── relleno.dart
+│   │   │   ├── tematica.dart
+│   │   │   ├── pedido.dart
+│   │   │   ├── pedido_detalle.dart
+│   │   │   ├── detalle_relleno.dart
+│   │   │   ├── recordatorio.dart
+│   │   │   ├── tarea_postventa.dart
+│   │   │   └── foto.dart
+│   │   └── repositories/                  # Repositorios CRUD
+│   │       ├── base_repository.dart
+│   │       ├── cliente_repository.dart
+│   │       ├── producto_repository.dart
+│   │       └── pedido_repository.dart
 │   └── presentation/
 │       ├── screens/
 │       │   ├── home_screen.dart           # Pantalla de inicio
@@ -151,10 +172,12 @@ CositApp/
 - Navegación básica
 - Tema visual
 
-### ⏳ Etapa 2: Base de Datos Local (SQLite)
-- Modelo de datos para pedidos
-- CRUD de pedidos
-- Persistencia local
+### ✅ Etapa 2: Base de Datos Local (SQLite) - COMPLETADA
+- 12 modelos de datos implementados
+- Base de datos SQLite con sqflite
+- Repositorios con CRUD completo
+- Datos seed iniciales
+- Migraciones preparadas
 
 ### ⏳ Etapa 3: Calendario de Pedidos
 - Integración de calendario
@@ -170,6 +193,106 @@ CositApp/
 - Exportación de datos (CSV/PDF)
 - Sincronización en la nube (opcional)
 - Estadísticas y reportes
+
+## 🗄️ Base de Datos
+
+### Estructura de la Base de Datos
+
+La aplicación utiliza **SQLite** a través del paquete `sqflite` para persistencia local. La base de datos se crea automáticamente al iniciar la app por primera vez.
+
+### Modelos de Datos (12 entidades)
+
+1. **Cliente**: Información de clientes del negocio
+2. **Familiar**: Familiares de clientes (para recordatorios de cumpleaños)
+3. **Producto**: Catálogo de productos (tortas, bocaditos, etc.)
+4. **Bizcochuelo**: Tipos de bizcochuelo disponibles
+5. **Relleno**: Tipos de relleno disponibles
+6. **Temática**: Temáticas de decoración
+7. **Pedido**: Pedidos realizados por clientes
+8. **PedidoDetalle**: Detalles de productos en cada pedido
+9. **DetalleRelleno**: Rellenos seleccionados por capa
+10. **Recordatorio**: Recordatorios para eventos importantes
+11. **TareaPostventa**: Tareas de seguimiento post-entrega
+12. **Foto**: Fotos asociadas a pedidos
+
+### Datos Iniciales (Seeds)
+
+Al crear la base de datos, se insertan datos de prueba:
+
+- **3 Bizcochuelos**: Vainilla, Chocolate, Combinado
+- **6 Rellenos**: DDL con merengues, DDL chip chocolate, DDL nueces, Mousse chocolate, Crema pastelera, Chantilly con frutas
+- **5 Temáticas**: Princesas, Superhéroes, Flores, Cumpleaños Clásico, Personalizada
+- **3 Productos**: Torta Clásica, Torta Grande, Bocaditos
+
+### Uso de Repositorios
+
+Todos los repositorios heredan de `BaseRepository` que proporciona operaciones CRUD básicas:
+
+```dart
+// Ejemplo: Usar el repositorio de clientes
+final clienteRepo = ClienteRepository();
+
+// Crear un nuevo cliente
+final nuevoCliente = Cliente(
+  nombre: 'María González',
+  telefono: '1234567890',
+  email: 'maria@example.com',
+  fechaRegistro: DateTime.now(),
+);
+await clienteRepo.insert(nuevoCliente);
+
+// Obtener todos los clientes
+final clientes = await clienteRepo.getAll();
+
+// Buscar cliente por nombre
+final resultados = await clienteRepo.searchByName('María');
+
+// Actualizar cliente
+final clienteActualizado = nuevoCliente.copyWith(telefono: '0987654321');
+await clienteRepo.update(clienteActualizado, nuevoCliente.id!);
+
+// Eliminar cliente
+await clienteRepo.delete(nuevoCliente.id!);
+```
+
+### Extender los Modelos
+
+Para agregar nuevos campos a un modelo existente:
+
+1. **Actualizar el modelo** (`lib/data/models/[modelo].dart`):
+   ```dart
+   class Cliente {
+     final String? nuevocampo;
+     // ... agregar en constructor, toMap, fromMap, copyWith
+   }
+   ```
+
+2. **Crear migración** en `database_helper.dart`:
+   ```dart
+   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+     if (oldVersion < 2) {
+       await db.execute('ALTER TABLE cliente ADD COLUMN nuevo_campo TEXT');
+     }
+   }
+   ```
+
+3. **Incrementar versión** de la base de datos:
+   ```dart
+   return await openDatabase(
+     path,
+     version: 2, // Incrementar versión
+     onCreate: _createDB,
+     onUpgrade: _upgradeDB,
+   );
+   ```
+
+### Para Crear un Nuevo Modelo
+
+1. Crear archivo en `lib/data/models/nuevo_modelo.dart`
+2. Implementar clase con métodos `toMap()`, `fromMap()`, y `copyWith()`
+3. Agregar tabla en `database_helper.dart` método `_createDB`
+4. Crear repositorio en `lib/data/repositories/nuevo_modelo_repository.dart`
+5. Extender de `BaseRepository<NuevoModelo>`
 
 ## 🧪 Testing
 
