@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'app.dart';
 import 'data/database/database_helper.dart';
 import 'data/repositories/cliente_repository.dart';
@@ -9,6 +10,9 @@ import 'data/repositories/pedido_repository.dart';
 void main() async {
   // Asegurar que Flutter está inicializado
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Inicializar localización en español
+  await initializeDateFormatting('es', null);
   
   // Inicializar la base de datos
   await _initializeDatabase();

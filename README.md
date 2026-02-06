@@ -8,19 +8,40 @@
 
 **Cositas de la Abuela** es una aplicación móvil para la gestión de pedidos de pastelería artesanal. La app permite a los usuarios gestionar pedidos, visualizar un calendario de entregas, mantener una galería de fotos de productos, y más.
 
-Esta es la **ETAPA 1** del proyecto: Proyecto Base Flutter con estructura de navegación y diseño visual.
+Esta es la **ETAPA 3** completada: Sistema completo de gestión de pedidos con dashboard, calendario, CRUD de clientes y catálogo.
 
-## ✨ Características Actuales (Etapa 1)
+## ✨ Características Actuales (Etapa 3 - COMPLETADA)
 
-- ✅ Proyecto Flutter funcional
+### Gestión de Pedidos
+- ✅ **Dashboard funcional** con resumen de pedidos del día y próximos 7 días
+- ✅ **Wizard multi-paso** para crear pedidos (cliente, productos, fechas, confirmación)
+- ✅ **Detalle completo** de pedidos con cambio de estado y gestión de pagos
+- ✅ **Calendario mensual** con marcadores de entregas y vista por día
+- ✅ **Checklist post-venta** para pedidos completados
+
+### Gestión de Clientes
+- ✅ **Lista de clientes** con búsqueda y ordenamiento
+- ✅ **Detalle de cliente** con historial de pedidos
+- ✅ **CRUD de familiares** con fechas de cumpleaños
+- ✅ **Formulario de cliente** con validación
+
+### Gestión de Catálogo
+- ✅ **CRUD de productos** (nombre, precio, categoría)
+- ✅ **CRUD de bizcochuelos** (tipos de bizcocho)
+- ✅ **CRUD de rellenos** (rellenos por capa)
+- ✅ **CRUD de temáticas** (decoraciones)
+
+### Base de Datos (Etapa 2)
+- ✅ SQLite con 12 tablas relacionadas
+- ✅ Repositorios con CRUD completo
+- ✅ Datos seed iniciales
+- ✅ Sistema de migraciones
+
+### UI/UX
 - ✅ Navegación con Bottom Navigation Bar (5 tabs)
-- ✅ Pantallas placeholder:
-  - 🏠 Inicio
-  - 📅 Calendario
-  - ➕ Nuevo Pedido
-  - 📸 Galería
-  - ⚙️ Configuración
 - ✅ Tema visual personalizado (colores cálidos/pastel)
+- ✅ Textos en español
+- ✅ Material Design 3
 - ✅ Compatibilidad con Android 13 (Samsung A32)
 
 ## 🎨 Diseño Visual
@@ -130,7 +151,7 @@ CositApp/
 │   │   │   └── app_constants.dart         # Constantes de la app
 │   │   └── theme/
 │   │       └── app_theme.dart             # Tema personalizado
-│   ├── data/                              # 🆕 Capa de datos
+│   ├── data/                              # Capa de datos
 │   │   ├── database/
 │   │   │   └── database_helper.dart       # Helper de SQLite
 │   │   ├── models/                        # 12 modelos de datos
@@ -149,19 +170,32 @@ CositApp/
 │   │   └── repositories/                  # Repositorios CRUD
 │   │       ├── base_repository.dart
 │   │       ├── cliente_repository.dart
+│   │       ├── familiar_repository.dart   # 🆕 ETAPA 3
 │   │       ├── producto_repository.dart
 │   │       └── pedido_repository.dart
 │   └── presentation/
 │       ├── screens/
-│       │   ├── home_screen.dart           # Pantalla de inicio
-│       │   ├── calendar_screen.dart       # Pantalla de calendario
+│       │   ├── home_screen.dart           # 🔄 Dashboard completo
+│       │   ├── calendar_screen.dart       # 🔄 Calendario funcional
+│       │   ├── nuevo_pedido_screen.dart   # 🆕 Wizard pedidos
+│       │   ├── detalle_pedido_screen.dart # 🆕 Detalle pedido
+│       │   ├── clientes_screen.dart       # 🆕 Lista clientes
+│       │   ├── detalle_cliente_screen.dart # 🆕 Detalle cliente
+│       │   ├── formulario_cliente_screen.dart # 🆕 Form cliente
+│       │   ├── catalogo_screen.dart       # 🆕 Menú catálogo
+│       │   ├── productos_screen.dart      # 🆕 CRUD productos
+│       │   ├── bizcochuelos_screen.dart   # 🆕 CRUD bizcochuelos
+│       │   ├── rellenos_screen.dart       # 🆕 CRUD rellenos
+│       │   ├── tematicas_screen.dart      # 🆕 CRUD temáticas
 │       │   ├── gallery_screen.dart        # Pantalla de galería
-│       │   └── settings_screen.dart       # Pantalla de configuración
+│       │   └── settings_screen.dart       # 🔄 Config con menús
 │       └── widgets/
 │           └── bottom_nav_bar.dart        # Bottom Navigation Bar
 ├── android/                               # Configuración Android
 ├── test/                                  # Tests unitarios
 ├── pubspec.yaml                          # Dependencias
+├── ETAPA2_COMPLETADA.md                  # Documentación Etapa 2
+├── ETAPA3_COMPLETADA.md                  # 🆕 Documentación Etapa 3
 └── README.md                             # Este archivo
 ```
 
@@ -179,20 +213,76 @@ CositApp/
 - Datos seed iniciales
 - Migraciones preparadas
 
-### ⏳ Etapa 3: Calendario de Pedidos
-- Integración de calendario
-- Visualización de pedidos por fecha
-- Notificaciones de recordatorio
+### ✅ Etapa 3: Gestión de Pedidos (Core) - COMPLETADA
+- Dashboard con resúmenes y lista de pedidos
+- Wizard multi-paso para crear pedidos
+- Detalle de pedido con cambio de estado y pagos
+- Calendario mensual con marcadores
+- Gestión completa de clientes y familiares
+- CRUD de catálogo (productos, bizcochuelos, rellenos, temáticas)
+- 13 pantallas funcionales nuevas
 
-### ⏳ Etapa 4: Galería de Fotos
+### ⏳ Etapa 4: Galería de Fotos y Recordatorios
 - Captura de fotos con la cámara
 - Gestión de galería
 - Asociación de fotos con pedidos
+- Notificaciones de recordatorios
 
 ### ⏳ Etapa 5: Funcionalidades Avanzadas
 - Exportación de datos (CSV/PDF)
 - Sincronización en la nube (opcional)
 - Estadísticas y reportes
+
+## 📦 Dependencias
+
+### Dependencias de Producción
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6      # Iconos iOS
+  sqflite: ^2.3.0              # Base de datos SQLite
+  path: ^1.8.3                 # Utilidades de path
+  path_provider: ^2.1.0        # Acceso a directorios del sistema
+  intl: ^0.19.0                # Formateo de fechas y números
+  table_calendar: ^3.0.9       # Widget de calendario
+  flutter_localizations:        # Localización en español
+    sdk: flutter
+```
+
+### Dependencias de Desarrollo
+
+```yaml
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0        # Análisis estático de código
+```
+
+## 📱 Pantallas Implementadas (14 pantallas)
+
+### Dashboard y Pedidos
+1. **HomeScreen** - Dashboard con resúmenes y lista de pedidos
+2. **NuevoPedidoScreen** - Wizard multi-paso para crear pedidos
+3. **DetallePedidoScreen** - Detalle completo con gestión de estado y pagos
+4. **CalendarScreen** - Calendario mensual con marcadores de entregas
+
+### Gestión de Clientes
+5. **ClientesScreen** - Lista de clientes con búsqueda y ordenamiento
+6. **DetalleClienteScreen** - Detalle de cliente con familiares e historial
+7. **FormularioClienteScreen** - Formulario para crear/editar clientes
+
+### Gestión de Catálogo
+8. **CatalogoScreen** - Menú principal del catálogo
+9. **ProductosScreen** - CRUD de productos con precios
+10. **BizcochuelosScreen** - CRUD de tipos de bizcochuelo
+11. **RellenosScreen** - CRUD de tipos de relleno
+12. **TematicasScreen** - CRUD de temáticas de decoración
+
+### Otras Pantallas
+13. **GalleryScreen** - Galería de fotos (placeholder)
+14. **SettingsScreen** - Configuración y menús de gestión
 
 ## 🗄️ Base de Datos
 
