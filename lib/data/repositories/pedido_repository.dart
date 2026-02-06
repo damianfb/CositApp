@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import '../models/pedido.dart';
 import '../models/pedido_detalle.dart';
 import '../models/detalle_relleno.dart';
+import '../models/cliente.dart';
 import 'base_repository.dart';
 
 /// Repositorio para gestión de Pedidos
@@ -85,6 +86,19 @@ class PedidoRepository extends BaseRepository<Pedido> {
     
     final total = result.first['total'];
     return total != null ? (total as num).toDouble() : 0.0;
+  }
+
+  /// Obtiene el cliente asociado a un pedido
+  Future<Cliente?> getClienteByPedido(int pedidoId) async {
+    final db = await database;
+    final result = await db.rawQuery('''
+      SELECT c.* FROM cliente c
+      INNER JOIN pedido p ON c.id = p.cliente_id
+      WHERE p.id = ?
+    ''', [pedidoId]);
+    
+    if (result.isEmpty) return null;
+    return Cliente.fromMap(result.first);
   }
 }
 

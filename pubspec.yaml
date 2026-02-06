@@ -16,6 +16,9 @@ dependencies:
   path_provider: ^2.1.0
   intl: 0.20.2
   table_calendar: ^3.0.9
+  image_picker: ^1.0.7
+  share_plus: ^7.2.1
+  permission_handler: ^11.2.0
 
 dev_dependencies:
   flutter_test:
