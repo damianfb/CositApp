@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/white" />
+    <!-- Background color matching app theme (Rosa pastel #F8BBD9) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F8BBD9" />
+        </shape>
+    </item>
+    <!-- Logo centered on splash screen -->
     <item>
         <bitmap
             android:gravity="center"
