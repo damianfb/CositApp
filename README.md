@@ -503,7 +503,7 @@ Para instalar el APK en un dispositivo Samsung A32 u otro dispositivo Android:
    - Sigue las instrucciones en pantalla para completar la instalación
 
 4. **Abre la aplicación**:
-   - Una vez instalada, busca "CositApp" o "Cositas de la Abuela" en tu lista de aplicaciones
+   - Una vez instalada, busca "Cositas de la Abuela" en tu lista de aplicaciones
    - Toca el ícono para abrir la app
 
 #### ⚠️ Notas Importantes
