@@ -5,6 +5,7 @@ import '../../data/repositories/pedido_repository.dart';
 import '../../data/repositories/cliente_repository.dart';
 import '../../data/models/pedido.dart';
 import '../../data/models/cliente.dart';
+import 'nuevo_pedido_screen.dart';
 
 /// Clase para datos del dashboard
 class _DashboardData {
@@ -85,9 +86,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Crear nuevo pedido - Próximamente')),
-          );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const NuevoPedidoScreen(),
+            ),
+          ).then((_) {
+            // Refrescar la pantalla después de crear un pedido
+            setState(() {});
+          });
         },
         icon: const Icon(Icons.add),
         label: const Text('Nuevo Pedido'),

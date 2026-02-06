@@ -4,6 +4,7 @@ import '../screens/home_screen.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/gallery_screen.dart';
 import '../screens/settings_screen.dart';
+import '../screens/nuevo_pedido_screen.dart';
 
 /// Widget de navegación inferior con 5 tabs
 class BottomNavBar extends StatefulWidget {
@@ -37,21 +38,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   void _showNewItemDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('➕ Nuevo Pedido'),
-          content: const Text('Próximamente: aquí podrás crear un nuevo pedido de pastelería'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cerrar'),
-            ),
-          ],
-        );
-      },
-    );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const NuevoPedidoScreen(),
+      ),
+    ).then((_) {
+      // Refrescar la pantalla actual después de crear un pedido
+      setState(() {});
+    });
   }
 
   @override
