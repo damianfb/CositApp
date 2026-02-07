@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../data/models/foto.dart';
+import '../../data/models/cliente.dart';
 import '../../data/repositories/foto_repository.dart';
 import '../../data/repositories/pedido_repository.dart';
 import '../../data/models/pedido.dart';
