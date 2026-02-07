@@ -70,7 +70,7 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
 
   /// Muestra diálogo para editar información de la foto
   Future<void> _editarFoto() async {
-    final TextEditingController descripcionController = 
+    final TextEditingController descripcionController =
         TextEditingController(text: _foto.descripcion);
     String tipoSeleccionado = _foto.tipo;
     String? categoriaSeleccionada = _foto.categoria;
@@ -110,11 +110,19 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                     border: OutlineInputBorder(),
                   ),
                   items: [
-                    DropdownMenuItem(value: Foto.tipoCatalogo, child: const Text('Catálogo')),
-                    DropdownMenuItem(value: Foto.tipoProductoFinal, child: const Text('Producto Final')),
-                    DropdownMenuItem(value: Foto.tipoProceso, child: const Text('Proceso')),
-                    DropdownMenuItem(value: Foto.tipoReferencia, child: const Text('Referencia')),
-                    DropdownMenuItem(value: Foto.tipoOtro, child: const Text('Otro')),
+                    DropdownMenuItem(
+                        value: Foto.tipoCatalogo,
+                        child: const Text('Catálogo')),
+                    DropdownMenuItem(
+                        value: Foto.tipoProductoFinal,
+                        child: const Text('Producto Final')),
+                    DropdownMenuItem(
+                        value: Foto.tipoProceso, child: const Text('Proceso')),
+                    DropdownMenuItem(
+                        value: Foto.tipoReferencia,
+                        child: const Text('Referencia')),
+                    DropdownMenuItem(
+                        value: Foto.tipoOtro, child: const Text('Otro')),
                   ],
                   onChanged: (value) {
                     setDialogState(() {
@@ -132,11 +140,12 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                     border: OutlineInputBorder(),
                   ),
                   items: [
-                    const DropdownMenuItem(value: null, child: Text('Sin categoría')),
+                    const DropdownMenuItem(
+                        value: null, child: Text('Sin categoría')),
                     ...categorias.map((cat) => DropdownMenuItem(
-                      value: cat,
-                      child: Text(cat),
-                    )),
+                          value: cat,
+                          child: Text(cat),
+                        )),
                   ],
                   onChanged: (value) {
                     setDialogState(() {
@@ -149,7 +158,8 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                 // Visible en galería
                 SwitchListTile(
                   title: const Text('Visible en galería'),
-                  subtitle: const Text('Mostrar esta foto en la galería pública'),
+                  subtitle:
+                      const Text('Mostrar esta foto en la galería pública'),
                   value: visibleSeleccionada,
                   onChanged: (value) {
                     setDialogState(() {
@@ -230,7 +240,7 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
     try {
       // Cargar pedidos recientes con información de cliente
       final pedidos = await _pedidoRepository.getAll();
-      
+
       if (!mounted) return;
 
       if (pedidos.isEmpty) {
@@ -269,7 +279,7 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                 final item = pedidosConCliente[index];
                 final pedido = item['pedido'] as Pedido;
                 final cliente = item['cliente'] as Cliente?;
-                
+
                 return ListTile(
                   title: Text('Pedido #${pedido.id}'),
                   subtitle: Text(
@@ -297,7 +307,7 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
       if (pedidoSeleccionado != null) {
         final fotoActualizada = _foto.copyWith(pedidoId: pedidoSeleccionado.id);
         await _fotoRepository.update(fotoActualizada, _foto.id!);
-        
+
         setState(() {
           _foto = fotoActualizada;
         });
@@ -305,7 +315,8 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('✅ Foto asociada al pedido #${pedidoSeleccionado.id}'),
+              content:
+                  Text('✅ Foto asociada al pedido #${pedidoSeleccionado.id}'),
               backgroundColor: Colors.green,
             ),
           );
@@ -332,10 +343,9 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Eliminar foto'),
-        content: const Text(
-          '¿Estás seguro de que deseas eliminar esta foto?\n\n'
-          'Esta acción no se puede deshacer.'
-        ),
+        content:
+            const Text('¿Estás seguro de que deseas eliminar esta foto?\n\n'
+                'Esta acción no se puede deshacer.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -465,13 +475,14 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Descripción
-                  if (_foto.descripcion != null && _foto.descripcion!.isNotEmpty) ...[
+                  if (_foto.descripcion != null &&
+                      _foto.descripcion!.isNotEmpty) ...[
                     Text(
                       'Descripción',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppConstants.textColor,
-                      ),
+                            fontWeight: FontWeight.bold,
+                            color: AppConstants.textColor,
+                          ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -490,7 +501,8 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                         Chip(
                           avatar: const Icon(Icons.category, size: 18),
                           label: Text(_foto.categoria!),
-                          backgroundColor: AppConstants.primaryColor.withOpacity(0.3),
+                          backgroundColor:
+                              AppConstants.primaryColor.withOpacity(0.3),
                         ),
                       Chip(
                         avatar: const Icon(Icons.label, size: 18),
@@ -499,12 +511,15 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                       ),
                       Chip(
                         avatar: Icon(
-                          _foto.visibleEnGaleria ? Icons.visibility : Icons.visibility_off,
+                          _foto.visibleEnGaleria
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           size: 18,
                         ),
-                        label: Text(_foto.visibleEnGaleria ? 'Visible' : 'Oculta'),
-                        backgroundColor: _foto.visibleEnGaleria 
-                            ? Colors.green.shade100 
+                        label:
+                            Text(_foto.visibleEnGaleria ? 'Visible' : 'Oculta'),
+                        backgroundColor: _foto.visibleEnGaleria
+                            ? Colors.green.shade100
                             : Colors.grey.shade300,
                       ),
                       if (_foto.pedidoId != null)
@@ -520,13 +535,14 @@ class _DetalleFotoScreenState extends State<DetalleFotoScreen> {
                   // Fecha
                   Row(
                     children: [
-                      const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
+                      const Icon(Icons.calendar_today,
+                          size: 18, color: Colors.grey),
                       const SizedBox(width: 8),
                       Text(
                         'Creada: ${_foto.fechaCreacion.toString().substring(0, 16)}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
-                        ),
+                              color: Colors.grey[600],
+                            ),
                       ),
                     ],
                   ),

@@ -11,9 +11,9 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._internal();
 
-  final FlutterLocalNotificationsPlugin _notifications = 
+  final FlutterLocalNotificationsPlugin _notifications =
       FlutterLocalNotificationsPlugin();
-  
+
   bool _initialized = false;
 
   /// Inicializa el servicio de notificaciones
@@ -25,8 +25,9 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation('America/Argentina/Buenos_Aires'));
 
     // Configuración Android
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    
+    const androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
     // Configuración de inicialización
     const initSettings = InitializationSettings(
       android: androidSettings,
@@ -45,7 +46,7 @@ class NotificationService {
     if (await Permission.notification.isGranted) {
       return true;
     }
-    
+
     final status = await Permission.notification.request();
     return status.isGranted;
   }

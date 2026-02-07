@@ -18,7 +18,7 @@ class BackupService {
   Future<File?> exportBackup() async {
     try {
       final db = await DatabaseHelper.instance.database;
-      
+
       // Obtener todos los datos de todas las tablas
       final backup = <String, dynamic>{
         'version': 1,
@@ -50,21 +50,22 @@ class BackupService {
 
       // Convertir a JSON
       final jsonData = json.encode(backup);
-      
+
       // Comprimir con gzip
       final compressed = GZipEncoder().encode(utf8.encode(jsonData));
-      
+
       // Guardar en archivo temporal
       final directory = await getApplicationDocumentsDirectory();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final filename = 'cositapp_backup_$timestamp.cositbackup';
       final file = File('${directory.path}/$filename');
-      
+
       await file.writeAsBytes(compressed!);
-      
+
       debugPrint('✅ Backup creado: ${file.path}');
-      debugPrint('📊 Tamaño: ${(file.lengthSync() / 1024).toStringAsFixed(2)} KB');
-      
+      debugPrint(
+          '📊 Tamaño: ${(file.lengthSync() / 1024).toStringAsFixed(2)} KB');
+
       return file;
     } catch (e) {
       debugPrint('❌ Error al crear backup: $e');
@@ -81,7 +82,7 @@ class BackupService {
 
       // Leer el contenido del archivo
       final bytes = await backupFile.readAsBytes();
-      
+
       // Obtener directorio de descargas
       final directory = await getExternalStorageDirectory();
       if (directory == null) {
@@ -100,10 +101,10 @@ class BackupService {
       final filename = 'cositapp_backup_$timestamp.cositbackup';
       final destinationFile = File('${backupsDir.path}/$filename');
       await destinationFile.writeAsBytes(bytes);
-      
+
       // Eliminar archivo temporal
       await backupFile.delete();
-      
+
       debugPrint('✅ Backup guardado en: ${destinationFile.path}');
       return destinationFile.path;
     } catch (e) {
@@ -143,10 +144,10 @@ class BackupService {
   Future<bool> restoreBackup(File backupFile) async {
     try {
       debugPrint('🔄 Iniciando restauración de backup...');
-      
+
       // Leer archivo
       final bytes = await backupFile.readAsBytes();
-      
+
       // Intentar descomprimir (puede ser JSON sin comprimir)
       List<int> decompressed;
       try {
@@ -155,26 +156,26 @@ class BackupService {
         // Si falla, asumir que es JSON sin comprimir
         decompressed = bytes;
       }
-      
+
       // Decodificar JSON
       final jsonData = utf8.decode(decompressed);
       final backup = json.decode(jsonData) as Map<String, dynamic>;
-      
+
       // Validar formato
       if (!backup.containsKey('version') || !backup.containsKey('cliente')) {
         debugPrint('❌ Formato de backup inválido');
         return false;
       }
-      
+
       debugPrint('📦 Backup válido detectado');
       debugPrint('📅 Fecha de exportación: ${backup['export_date']}');
-      
+
       // Obtener base de datos
       final db = await DatabaseHelper.instance.database;
-      
+
       // Desactivar foreign keys temporalmente
       await db.execute('PRAGMA foreign_keys = OFF');
-      
+
       // Limpiar todas las tablas
       final tables = [
         'detalle_relleno',
@@ -190,31 +191,32 @@ class BackupService {
         'relleno',
         'bizcochuelo',
       ];
-      
+
       debugPrint('🗑️ Limpiando base de datos actual...');
       for (final table in tables) {
         await db.delete(table);
       }
-      
+
       // Restaurar cada tabla
       debugPrint('📥 Restaurando datos...');
       int totalRecords = 0;
-      
+
       for (final table in tables) {
         if (backup.containsKey(table)) {
           final records = backup[table] as List<dynamic>;
-          debugPrint('  - Restaurando tabla $table: ${records.length} registros');
-          
+          debugPrint(
+              '  - Restaurando tabla $table: ${records.length} registros');
+
           for (final record in records) {
             await db.insert(table, record as Map<String, dynamic>);
             totalRecords++;
           }
         }
       }
-      
+
       // Reactivar foreign keys
       await db.execute('PRAGMA foreign_keys = ON');
-      
+
       debugPrint('✅ Restauración completada: $totalRecords registros');
       return true;
     } catch (e, stackTrace) {
@@ -228,17 +230,17 @@ class BackupService {
   Future<Map<String, dynamic>?> getBackupInfo(File backupFile) async {
     try {
       final bytes = await backupFile.readAsBytes();
-      
+
       List<int> decompressed;
       try {
         decompressed = GZipDecoder().decodeBytes(bytes);
       } catch (e) {
         decompressed = bytes;
       }
-      
+
       final jsonData = utf8.decode(decompressed);
       final backup = json.decode(jsonData) as Map<String, dynamic>;
-      
+
       // Contar registros por tabla
       final info = <String, dynamic>{
         'version': backup['version'],
@@ -247,7 +249,7 @@ class BackupService {
         'tables': <String, int>{},
         'total_records': 0,
       };
-      
+
       final tables = [
         'cliente',
         'familiar',
@@ -258,15 +260,16 @@ class BackupService {
         'tematica',
         'foto',
       ];
-      
+
       for (final table in tables) {
         if (backup.containsKey(table)) {
           final records = backup[table] as List<dynamic>;
           info['tables'][table] = records.length;
-          info['total_records'] = (info['total_records'] as int) + records.length;
+          info['total_records'] =
+              (info['total_records'] as int) + records.length;
         }
       }
-      
+
       return info;
     } catch (e) {
       debugPrint('❌ Error al leer info de backup: $e');
@@ -279,19 +282,20 @@ class BackupService {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final backupsDir = Directory(directory.path);
-      
+
       if (!await backupsDir.exists()) {
         return [];
       }
-      
+
       final files = backupsDir
           .listSync()
           .where((file) => file.path.endsWith('.cositbackup'))
           .toList();
-      
+
       // Ordenar por fecha (más reciente primero)
-      files.sort((a, b) => b.statSync().modified.compareTo(a.statSync().modified));
-      
+      files.sort(
+          (a, b) => b.statSync().modified.compareTo(a.statSync().modified));
+
       return files;
     } catch (e) {
       debugPrint('❌ Error al listar backups: $e');
@@ -303,19 +307,20 @@ class BackupService {
   Future<void> cleanOldBackups({int keepCount = 5}) async {
     try {
       final backups = await listAvailableBackups();
-      
+
       if (backups.length <= keepCount) {
         debugPrint('ℹ️ No hay backups antiguos para eliminar');
         return;
       }
-      
+
       final toDelete = backups.skip(keepCount);
       for (final backup in toDelete) {
         await backup.delete();
         debugPrint('🗑️ Backup antiguo eliminado: ${backup.path}');
       }
-      
-      debugPrint('✅ Limpieza completada: ${toDelete.length} backups eliminados');
+
+      debugPrint(
+          '✅ Limpieza completada: ${toDelete.length} backups eliminados');
     } catch (e) {
       debugPrint('❌ Error al limpiar backups: $e');
     }
@@ -325,10 +330,10 @@ class BackupService {
   Future<bool> verifyBackupIntegrity(File backupFile) async {
     try {
       final info = await getBackupInfo(backupFile);
-      return info != null && 
-             info.containsKey('version') && 
-             info.containsKey('export_date') &&
-             (info['total_records'] as int) > 0;
+      return info != null &&
+          info.containsKey('version') &&
+          info.containsKey('export_date') &&
+          (info['total_records'] as int) > 0;
     } catch (e) {
       return false;
     }

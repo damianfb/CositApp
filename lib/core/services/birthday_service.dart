@@ -33,7 +33,7 @@ class BirthdayInfo {
       fechaNacimiento.month,
       fechaNacimiento.day,
     );
-    
+
     if (thisYearBirthday.isBefore(now)) {
       // Si ya pasó este año, calcular para el próximo año
       final nextYearBirthday = DateTime(
@@ -55,7 +55,7 @@ class BirthdayInfo {
       fechaNacimiento.month,
       fechaNacimiento.day,
     );
-    
+
     if (thisYearBirthday.isBefore(now)) {
       return DateTime(
         now.year + 1,
@@ -71,14 +71,14 @@ class BirthdayInfo {
   int get edadQueCumple {
     final now = DateTime.now();
     int edad = now.year - fechaNacimiento.year;
-    
+
     // Si el cumpleaños no ha ocurrido este año, calcular edad para el próximo
     final thisYearBirthday = DateTime(
       now.year,
       fechaNacimiento.month,
       fechaNacimiento.day,
     );
-    
+
     if (thisYearBirthday.isAfter(now)) {
       return edad;
     } else {
@@ -117,7 +117,7 @@ class BirthdayService {
         if (fechaNac.month == now.month) {
           // Obtener información del cliente asociado
           final cliente = await _clienteRepo.getById(familiar.clienteId);
-          
+
           birthdays.add(BirthdayInfo(
             id: familiar.id!,
             nombre: familiar.nombre,
@@ -132,7 +132,8 @@ class BirthdayService {
     }
 
     // Ordenar por día del mes
-    birthdays.sort((a, b) => a.fechaNacimiento.day.compareTo(b.fechaNacimiento.day));
+    birthdays
+        .sort((a, b) => a.fechaNacimiento.day.compareTo(b.fechaNacimiento.day));
 
     return birthdays;
   }
@@ -175,7 +176,8 @@ class BirthdayService {
     }
 
     // Ordenar por días hasta cumpleaños
-    birthdays.sort((a, b) => a.diasHastaCumpleanos.compareTo(b.diasHastaCumpleanos));
+    birthdays
+        .sort((a, b) => a.diasHastaCumpleanos.compareTo(b.diasHastaCumpleanos));
 
     return birthdays;
   }
@@ -184,7 +186,7 @@ class BirthdayService {
   Future<void> scheduleBirthdayNotifications({int daysInAdvance = 7}) async {
     try {
       final birthdays = await getUpcomingBirthdays(days: 60);
-      
+
       for (final birthday in birthdays) {
         // Programar notificación X días antes
         await _notificationService.scheduleBirthdayReminder(
@@ -195,7 +197,8 @@ class BirthdayService {
         );
       }
 
-      debugPrint('✅ ${birthdays.length} notificaciones de cumpleaños programadas');
+      debugPrint(
+          '✅ ${birthdays.length} notificaciones de cumpleaños programadas');
     } catch (e) {
       debugPrint('❌ Error al programar notificaciones de cumpleaños: $e');
     }
@@ -205,7 +208,7 @@ class BirthdayService {
   Future<void> sendMonthlyBirthdayNotification() async {
     try {
       final birthdays = await getBirthdaysThisMonth();
-      
+
       if (birthdays.isEmpty) {
         debugPrint('ℹ️ No hay cumpleaños este mes');
         return;
@@ -213,8 +216,9 @@ class BirthdayService {
 
       // Crear mensaje con todos los cumpleaños
       final names = birthdays.take(5).map((b) => b.nombre).join(', ');
-      final moreCount = birthdays.length > 5 ? ' y ${birthdays.length - 5} más' : '';
-      
+      final moreCount =
+          birthdays.length > 5 ? ' y ${birthdays.length - 5} más' : '';
+
       await _notificationService.showInstantNotification(
         id: 99999,
         title: '🎂 Cumpleaños del mes',
@@ -245,7 +249,7 @@ class BirthdayService {
   /// Genera mensaje de cumpleaños personalizado
   String getBirthdayMessage(BirthdayInfo birthday) {
     return '¡Hola! 🎂 Solo quería recordarte que pronto es el cumpleaños de ${birthday.nombre}. '
-           '¿Te gustaría hacer un pedido especial? ¡Estamos para ayudarte!';
+        '¿Te gustaría hacer un pedido especial? ¡Estamos para ayudarte!';
   }
 
   /// Verifica si hay cumpleaños hoy
@@ -279,7 +283,7 @@ class BirthdayService {
   Future<void> sendTodayBirthdayNotification() async {
     try {
       final birthdays = await getBirthdaysToday();
-      
+
       if (birthdays.isEmpty) {
         return;
       }
@@ -294,7 +298,8 @@ class BirthdayService {
         );
       }
 
-      debugPrint('✅ ${birthdays.length} notificaciones de cumpleaños de hoy enviadas');
+      debugPrint(
+          '✅ ${birthdays.length} notificaciones de cumpleaños de hoy enviadas');
     } catch (e) {
       debugPrint('❌ Error al enviar notificaciones de hoy: $e');
     }
@@ -303,11 +308,12 @@ class BirthdayService {
   /// Obtiene estadísticas de cumpleaños
   Future<Map<String, int>> getBirthdayStats() async {
     final familiares = await _familiarRepo.getAll();
-    
-    final withBirthday = familiares.where((f) => f.fechaNacimiento != null).length;
+
+    final withBirthday =
+        familiares.where((f) => f.fechaNacimiento != null).length;
     final thisMonth = (await getBirthdaysThisMonth()).length;
     final upcoming = (await getUpcomingBirthdays(days: 30)).length;
-    
+
     return {
       'total': familiares.length,
       'with_birthday': withBirthday,
